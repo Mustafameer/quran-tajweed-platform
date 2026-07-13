@@ -28,11 +28,20 @@ import {
   Book
 } from './src/types';
 
+import mysql from 'mysql2/promise';
+
 dotenv.config();
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const DB_FILE = process.env.DATA_STORE_PATH || path.join(process.cwd(), 'data-store.json');
 const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Initialize MySQL pool if MYSQL_URL is provided (e.g., on Railway)
+let pool: mysql.Pool | null = null;
+if (process.env.MYSQL_URL) {
+  console.log('[Database] Initializing MySQL connection pool using MYSQL_URL...');
+  pool = mysql.createPool(process.env.MYSQL_URL);
+}
 
 // Initialize Gemini SDK with telemetry header
 const ai = process.env.GEMINI_API_KEY
@@ -66,27 +75,49 @@ let activeTelegramToken = '';
 let activeTelegramBotName = 'StudyQuranbot';
 
 // Helper to write database state
-function saveDatabase() {
+async function saveDatabase() {
+  const data = {
+    users,
+    passwords,
+    courses,
+    enrollments,
+    sessions,
+    activeSessions,
+    attendanceLogs,
+    evaluations,
+    notifications,
+    auditLogs,
+    lessons,
+    userFeedbacks,
+    practiceClips,
+    weeklyReports,
+    books,
+    activeTelegramToken,
+    activeTelegramBotName
+  };
+
+  if (pool) {
+    try {
+      const jsonStr = JSON.stringify(data, null, 2);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS platform_state (
+          id INT PRIMARY KEY,
+          data LONGTEXT NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+      `);
+      await pool.query(
+        'INSERT INTO platform_state (id, data) VALUES (1, ?) ON DUPLICATE KEY UPDATE data = ?',
+        [jsonStr, jsonStr]
+      );
+      // Write a local backup
+      fs.writeFileSync(DB_FILE, jsonStr, 'utf-8');
+      return;
+    } catch (err) {
+      console.error('[Database] Error saving state to MySQL:', err);
+    }
+  }
+
   try {
-    const data = {
-      users,
-      passwords,
-      courses,
-      enrollments,
-      sessions,
-      activeSessions,
-      attendanceLogs,
-      evaluations,
-      notifications,
-      auditLogs,
-      lessons,
-      userFeedbacks,
-      practiceClips,
-      weeklyReports,
-      books,
-      activeTelegramToken,
-      activeTelegramBotName
-    };
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (err) {
     console.error('Error saving data store:', err);
@@ -94,7 +125,47 @@ function saveDatabase() {
 }
 
 // Helper to load database state or seed defaults
-function loadDatabase() {
+async function loadDatabase() {
+  if (pool) {
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS platform_state (
+          id INT PRIMARY KEY,
+          data LONGTEXT NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+      `);
+      const [rows]: any = await pool.query('SELECT data FROM platform_state WHERE id = 1');
+      if (rows && rows.length > 0) {
+        const data = JSON.parse(rows[0].data);
+        users = data.users || [];
+        passwords = data.passwords || {};
+        courses = data.courses || [];
+        enrollments = data.enrollments || [];
+        sessions = data.sessions || [];
+        activeSessions = data.activeSessions || {};
+        attendanceLogs = data.attendanceLogs || [];
+        evaluations = data.evaluations || [];
+        notifications = data.notifications || [];
+        auditLogs = data.auditLogs || [];
+        lessons = data.lessons || [];
+        userFeedbacks = data.userFeedbacks || [];
+        practiceClips = data.practiceClips || [];
+        weeklyReports = data.weeklyReports || [];
+        books = data.books && data.books.length > 0 ? data.books : BOOKS_DATABASE;
+        activeTelegramToken = process.env.TELEGRAM_BOT_TOKEN || data.activeTelegramToken || '';
+        activeTelegramBotName = data.activeTelegramBotName || 'StudyQuranbot';
+        
+        if (activeTelegramToken) {
+          startTelegramPolling(activeTelegramToken);
+        }
+        console.log('[Database] Loaded state successfully from MySQL.');
+        return;
+      }
+    } catch (err) {
+      console.error('[Database] Error loading from MySQL, falling back to local file / defaults:', err);
+    }
+  }
+
   if (fs.existsSync(DB_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
@@ -119,9 +190,10 @@ function loadDatabase() {
       if (activeTelegramToken) {
         startTelegramPolling(activeTelegramToken);
       }
+      console.log('[Database] Loaded state successfully from local file.');
       return;
     } catch (err) {
-      console.error('Error parsing data store, seeding defaults...');
+      console.error('Error parsing local data store, seeding defaults...');
     }
   }
   seedDefaults();
@@ -677,11 +749,8 @@ async function startTelegramPolling(token: string) {
   }, 3000);
 }
 
-// Load DB immediately
-loadDatabase();
-
-
 async function startServer() {
+  await loadDatabase();
   const app = express();
   app.use(express.json());
 
