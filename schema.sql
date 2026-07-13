@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS enrollments;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS teachers;
 DROP TABLE IF EXISTS students;
-SET FOREIGN_KEY_CHECKS = 1;
 
 -- 1. STUDENTS TABLE
 CREATE TABLE students (
@@ -150,3 +149,5 @@ CREATE TABLE audit_logs (
     INDEX idx_audit_user (user_id),
     INDEX idx_audit_action (action)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+SET FOREIGN_KEY_CHECKS = 1;
