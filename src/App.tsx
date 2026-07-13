@@ -53,9 +53,10 @@ export default function App() {
     };
   }, []);
 
-  // Theme state
+  // Theme state (defaults to dark if not set)
   const [isDark, setIsDark] = useState<boolean>(() => {
-    return localStorage.getItem('theme') === 'dark';
+    const saved = localStorage.getItem('theme');
+    return saved === null ? true : saved === 'dark';
   });
 
   useEffect(() => {
