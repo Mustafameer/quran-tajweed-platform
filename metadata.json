@@ -1,0 +1,6 @@
+{
+  "name": "Quran Reading & Tajweed Platform",
+  "description": "An interactive online platform for Quran reading, Tajweed rules, and memorization. Includes super admin, teacher, and student portals, interactive real-time voice classrooms, dynamic Arabic Quran text assignments, and resources.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

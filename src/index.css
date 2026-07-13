@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Amiri", "Georgia", serif;
+  --font-kufi: "Reem Kufi", "Cairo", sans-serif;
+  --font-naskh: "Scheherazade New", "Amiri", serif;
+}
+
+/* ==========================================
+   Dark Mode Overrides for Admin Dashboard
+   ========================================== */
+.dark #admin-dashboard-container {
+  background-color: #0B0F19 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark #admin-dashboard-container .bg-white {
+  background-color: #121826 !important;
+  color: #e2e8f0 !important;
+  border-color: #1e293b !important;
+}
+
+.dark #admin-dashboard-container .bg-slate-50 {
+  background-color: #0B0F19 !important;
+  color: #e2e8f0 !important;
+  border-color: #1e293b !important;
+}
+
+/* Text color overrides */
+.dark #admin-dashboard-container .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+.dark #admin-dashboard-container .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark #admin-dashboard-container .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+.dark #admin-dashboard-container .text-slate-550,
+.dark #admin-dashboard-container .text-slate-500,
+.dark #admin-dashboard-container .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Borders */
+.dark #admin-dashboard-container .border-slate-100,
+.dark #admin-dashboard-container .border-slate-200,
+.dark #admin-dashboard-container .border-gray-200 {
+  border-color: #1e293b !important;
+}
+
+/* Inactive tabs hover */
+.dark #admin-dashboard-container .hover\:bg-slate-50:hover,
+.dark #admin-dashboard-container .hover\:bg-slate-50\/50:hover {
+  background-color: #1e293b !important;
+}
+
+/* Form inputs & selects */
+.dark #admin-dashboard-container input,
+.dark #admin-dashboard-container select,
+.dark #admin-dashboard-container textarea {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+.dark #admin-dashboard-container input::placeholder {
+  color: #64748b !important;
+}
+
+/* Table elements */
+.dark #admin-dashboard-container tr:hover {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+}
+
+.dark #admin-dashboard-container th {
+  color: #cbd5e1 !important;
+  border-color: #1e293b !important;
+  background-color: #1e293b !important;
+}
+
+.dark #admin-dashboard-container td {
+  border-color: #1e293b !important;
+}
+
+/* Icons/badge boxes */
+.dark #admin-dashboard-container .bg-indigo-50 {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+  color: #818cf8 !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+}
+.dark #admin-dashboard-container .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+}
+.dark #admin-dashboard-container .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+.dark #admin-dashboard-container .bg-teal-50 {
+  background-color: rgba(20, 184, 166, 0.15) !important;
+  color: #2dd4bf !important;
+  border-color: rgba(20, 184, 166, 0.2) !important;
+}
+
+/* Buttons */
+.dark #admin-dashboard-container button.bg-white {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+.dark #admin-dashboard-container button.bg-white:hover {
+  background-color: #334155 !important;
+}
+.dark #admin-dashboard-container button.bg-slate-100 {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+.dark #admin-dashboard-container button.bg-slate-100:hover {
+  background-color: #334155 !important;
+}
