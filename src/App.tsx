@@ -411,8 +411,9 @@ export default function App() {
                       <button
                         onClick={() => setOpenFaq(prev => ({ ...prev, [index]: !prev[index] }))}
                         className="w-full flex justify-between items-center p-4.5 text-right cursor-pointer gap-4 focus:outline-none"
+                        style={{ color: isDark ? '#e2e8f0' : '#1e293b' }}
                       >
-                        <span className={`text-sm font-extrabold`} style={isDark ? { color: '#e2e8f0' } : { color: '#1e293b' }}>
+                        <span className="text-sm font-extrabold">
                           {item.q}
                         </span>
                         <span className={`p-1.5 rounded-lg border transition-colors ${
