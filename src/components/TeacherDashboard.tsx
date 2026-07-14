@@ -472,6 +472,45 @@ export default function TeacherDashboard({ currentUser, onLogout, onLaunchClassr
     }
   };
 
+  const handleForceLeaveAttendance = async (sessionId: string, studentId: string) => {
+    try {
+      const res = await fetch('/api/attendance/leave', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, studentId })
+      });
+      if (res.ok) {
+        showToast('تم إنهاء حضور الطالب بنجاح وتثبيت وقت المغادرة 🔔', 'success');
+        fetchTeacherData();
+      } else {
+        const err = await res.json();
+        showToast(err.error || 'فشل في إنهاء حضور الطالب', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('حدث خطأ في الشبكة أثناء محاولة إنهاء حضور الطالب', 'error');
+    }
+  };
+
+  const handleDeleteAttendance = async (id: string) => {
+    if (!window.confirm('هل أنت متأكد من رغبتك في حذف سجل حضور هذا الطالب نهائياً؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+    try {
+      const res = await fetch(`/api/attendance/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        showToast('تم حذف سجل الحضور بنجاح 🗑️', 'success');
+        fetchTeacherData();
+      } else {
+        const err = await res.json();
+        showToast(err.error || 'فشل في حذف السجل', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('حدث خطأ في الشبكة أثناء محاولة حذف السجل', 'error');
+    }
+  };
+
   const handleAddStudentToCourse = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!addStudentCourseId || !addStudentId) {
@@ -966,6 +1005,7 @@ export default function TeacherDashboard({ currentUser, onLogout, onLaunchClassr
                           <th className="p-3">تاريخ الدخول</th>
                           <th className="p-3">وقت المغادرة</th>
                           <th className="p-3">مدة البقاء</th>
+                          <th className="p-3 text-center">الإجراءات</th>
                         </tr>
                       </thead>
                       <tbody className={`divide-y ${isDark ? 'divide-slate-800 text-slate-200' : 'divide-slate-100 text-slate-700'}`}>
@@ -981,6 +1021,26 @@ export default function TeacherDashboard({ currentUser, onLogout, onLaunchClassr
                             </td>
                             <td className="p-3 font-mono text-xs">
                               {att.duration ? `${Math.round(att.duration / 60)} دقيقة` : 'قيد المتابعة'}
+                            </td>
+                            <td className="p-3 text-center">
+                              <div className="flex gap-2 justify-center">
+                                {!att.leaveTime && (
+                                  <button
+                                    onClick={() => handleForceLeaveAttendance(att.sessionId, att.studentId)}
+                                    className="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors cursor-pointer shadow-sm"
+                                    title="إنهاء حضور الطالب وتثبيت وقت مغادرته الآن"
+                                  >
+                                    إنهاء الحضور
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => handleDeleteAttendance(att.id)}
+                                  className="bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors cursor-pointer shadow-sm"
+                                  title="حذف هذا السجل نهائياً"
+                                >
+                                  حذف السجل
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}

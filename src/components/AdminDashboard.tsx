@@ -261,6 +261,45 @@ export default function AdminDashboard({ currentUser, onLogout }: AdminDashboard
     }
   };
 
+  const handleForceLeaveAttendance = async (sessionId: string, studentId: string) => {
+    try {
+      const res = await fetch('/api/attendance/leave', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, studentId })
+      });
+      if (res.ok) {
+        setMessage('تم إنهاء حضور الطالب بنجاح وإغلاق الجلسة الصوتية له.');
+        fetchAllData();
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        const err = await res.json();
+        alert(err.error || 'فشل في إنهاء حضور الطالب');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteAttendance = async (id: string) => {
+    if (!window.confirm('هل أنت متأكد من رغبتك في حذف سجل حضور هذا الطالب نهائياً؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+    try {
+      const res = await fetch(`/api/attendance/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        setMessage('تم حذف سجل الحضور بنجاح.');
+        fetchAllData();
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        const err = await res.json();
+        alert(err.error || 'فشل في حذف السجل');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleUpdateCourse = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingCourse) return;
@@ -1083,6 +1122,7 @@ export default function AdminDashboard({ currentUser, onLogout }: AdminDashboard
                         <th className="p-3">وقت الانضمام</th>
                         <th className="p-3">وقت المغادرة</th>
                         <th className="p-3">المدة الكلية</th>
+                        <th className="p-3 text-center">الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -1098,6 +1138,26 @@ export default function AdminDashboard({ currentUser, onLogout }: AdminDashboard
                           </td>
                           <td className="p-3 font-mono text-xs">
                             {att.duration ? `${Math.round(att.duration / 60)} دقيقة` : 'قيد المتابعة'}
+                          </td>
+                          <td className="p-3 text-center">
+                            <div className="flex gap-2 justify-center">
+                              {!att.leaveTime && (
+                                <button
+                                  onClick={() => handleForceLeaveAttendance(att.sessionId, att.studentId)}
+                                  className="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors cursor-pointer shadow-sm"
+                                  title="إنهاء حضور الطالب وتثبيت وقت مغادرته الآن"
+                                >
+                                  إنهاء الحضور
+                                </button>
+                              )}
+                              <button
+                                  onClick={() => handleDeleteAttendance(att.id)}
+                                  className="bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors cursor-pointer shadow-sm"
+                                  title="حذف هذا السجل نهائياً"
+                                >
+                                  حذف السجل
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

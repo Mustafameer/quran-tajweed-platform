@@ -1767,6 +1767,17 @@ async function startServer() {
     res.json({ success: false, message: 'لا يوجد سجل دخول نشط' });
   });
 
+  app.delete('/api/attendance/:id', (req, res) => {
+    const { id } = req.params;
+    const initialLength = attendanceLogs.length;
+    attendanceLogs = attendanceLogs.filter(log => log.id !== id);
+    if (attendanceLogs.length < initialLength) {
+      saveDatabase();
+      return res.json({ success: true, message: 'تم حذف سجل الحضور بنجاح' });
+    }
+    res.status(404).json({ error: 'السجل غير موجود' });
+  });
+
   // --- Evaluations ---
   app.get('/api/evaluations', (req, res) => {
     res.json(evaluations);
