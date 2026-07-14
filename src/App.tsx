@@ -313,13 +313,13 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-6 py-12" id="landing-page">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-7 space-y-6 text-slate-800 text-right pr-0 lg:pr-8">
-                <span className={`text-xs font-bold px-3.5 py-1.5 rounded-full border ${isDark ? 'bg-emerald-950/45 border-emerald-900 text-emerald-400' : 'bg-emerald-50 border-emerald-100 text-emerald-800'}`}>القرآن الكريم لتعليم الأجيال ✨</span>
+                <span className={`text-xs font-bold px-3.5 py-1.5 rounded-full border ${isDark ? 'bg-emerald-950/45 border-emerald-900 text-emerald-400' : 'bg-emerald-50 border-emerald-100 text-emerald-800'}`}>القرآن الكريم والدروس الحوزوية لتعليم الأجيال ✨</span>
                 <h2 className={`text-3xl md:text-5xl font-extrabold tracking-tight leading-tight font-sans ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>
-                  المنصة الذكية لتعليم <br className="hidden md:inline" />
-                  قراءة القرآن وأحكام التجويد
+                  المنصة الذكية لتدريس القرآن <br className="hidden md:inline" />
+                  والتجويد والدروس الحوزوية
                 </h2>
                 <p className={`text-sm md:text-base leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  منظومة متكاملة لتعليم القرآن الكريم وقواعد التجويد برواياته بربط صوتي مباشر فوري، وإتاحة الميكروفون للطلاب فرداً فرداً بمراقبة الشيوخ وتقييم مستوياتهم تلقائياً باستخدام التكنولوجيا الذكية والذكاء الاصطناعي.
+                  منظومة متكاملة لتعليم القرآن الكريم وقواعد التجويد برواياته بالإضافة إلى المباحث والدروس الحوزوية والفقهية بربط صوتي مباشر فوري، مع إمكانية التقييم التلقائي وتوجيه الشيوخ والأساتذة.
                 </p>
 
                 {/* Core capabilities list */}
@@ -327,16 +327,16 @@ export default function App() {
                   <div className={`p-5 border rounded-2xl shadow-sm flex gap-3 hover:shadow-md transition-shadow ${isDark ? 'bg-[#121826] border-slate-850' : 'bg-white border-slate-100'}`}>
                     <div className="h-10 w-10 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold flex-shrink-0">🎤</div>
                     <div>
-                      <h4 className={`font-bold text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>مقرأة صوتية حية</h4>
-                      <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>غرف WebRTC لتنظيم وتدريس مخارج الحروف وقراءتها للشيخ مباشرة.</p>
+                      <h4 className={`font-bold text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>مقرأة وفصول صوتية حية</h4>
+                      <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>غرف WebRTC لتنظيم وتدريس التلاوة ومباحث الدروس الحوزوية مباشرة مع الأساتذة والشيوخ.</p>
                     </div>
                   </div>
 
                   <div className={`p-5 border rounded-2xl shadow-sm flex gap-3 hover:shadow-md transition-shadow ${isDark ? 'bg-[#121826] border-slate-850' : 'bg-white border-slate-100'}`}>
                     <div className="h-10 w-10 bg-indigo-50 dark:bg-indigo-950/40 rounded-xl flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold flex-shrink-0">🤖</div>
                     <div>
-                      <h4 className={`font-bold text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>مساعد تجويد ذكي</h4>
-                      <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>مدعوم بـ Gemini AI لشرح وتبسيط أحكام النون والميم الساكنة والمخارج.</p>
+                      <h4 className={`font-bold text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>مساعد تعليمي ذكي</h4>
+                      <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>مدعوم بـ Gemini AI لشرح وتبسيط أحكام التجويد والدروس والمسائل الحوزوية.</p>
                     </div>
                   </div>
 
@@ -501,7 +501,7 @@ export default function App() {
       {/* Global Footer */}
       <footer className={`py-6 text-center border-t text-xs mt-12 shadow-sm transition-colors duration-300 ${isDark ? 'bg-[#121826] border-slate-850 text-slate-400' : 'bg-white border-slate-100 text-slate-500'}`}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} منصة تعليم القرآن وتدريس التجويد. جميع الحقوق محفوظة.</p>
+          <p>© {new Date().getFullYear()} منصة تعليم القرآن الكريم وتدريس العلوم الحوزوية. جميع الحقوق محفوظة.</p>
           <div className="flex gap-4">
             <button
               onClick={() => setShowDocs(true)}

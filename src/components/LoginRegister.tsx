@@ -211,21 +211,21 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden text-right" dir="rtl">
+    <div className="max-w-md mx-auto bg-white dark:bg-[#121826] rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl overflow-hidden text-right transition-colors duration-300" dir="rtl">
       {/* Accent Header */}
-      <div className="bg-white border-b border-slate-100 px-6 py-8 text-center">
-        <h2 className="text-2xl font-bold font-sans text-slate-800">بوابة القرآن الكريم والتجويد</h2>
-        <p className="text-slate-500 text-sm mt-1.5 font-medium">المنصة التعليمية الشاملة لتعليم تلاوة وأحكام التجويد</p>
+      <div className="bg-white dark:bg-[#121826] border-b border-slate-100 dark:border-slate-800/80 px-6 py-8 text-center transition-colors duration-300">
+        <h2 className="text-2xl font-bold font-sans text-slate-800 dark:text-slate-105">بوابة القرآن الكريم والدروس الحوزوية</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1.5 font-medium">المنصة التعليمية الشاملة لتعليم التلاوة والتجويد والدروس الحوزوية</p>
       </div>
 
       <div className="p-6">
         {/* Toggle tabs */}
         {!require2FA && (
-          <div className="flex border border-slate-100 mb-6 bg-slate-50 p-1.5 rounded-2xl gap-2">
+          <div className="flex border border-slate-100 dark:border-slate-800 mb-6 bg-slate-50 dark:bg-slate-900/35 p-1.5 rounded-2xl gap-2 transition-colors">
             <button
               id="tab-login"
               onClick={() => { setIsLogin(true); setError(''); setMessage(''); }}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${isLogin ? 'bg-white text-emerald-800 shadow-sm border border-slate-100 font-bold' : 'text-slate-500 hover:text-emerald-700'
+              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${isLogin ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-400 shadow-sm border border-slate-100 dark:border-slate-700 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-450'
                 }`}
             >
               تسجيل دخول
@@ -233,7 +233,7 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
             <button
               id="tab-register"
               onClick={() => { setIsLogin(false); setError(''); setMessage(''); }}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${!isLogin ? 'bg-white text-emerald-800 shadow-sm border border-slate-100 font-bold' : 'text-slate-500 hover:text-emerald-700'
+              className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${!isLogin ? 'bg-white dark:bg-slate-800 text-emerald-800 dark:text-emerald-400 shadow-sm border border-slate-100 dark:border-slate-700 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-450'
                 }`}
             >
               إنشاء حساب جديد
@@ -242,14 +242,14 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
         )}
 
         {error && (
-          <div id="auth-error-alert" className="bg-rose-50 border border-rose-200 text-rose-700 text-sm p-4 rounded-xl mb-4 flex items-start gap-2 leading-relaxed">
+          <div id="auth-error-alert" className="bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 text-sm p-4 rounded-xl mb-4 flex items-start gap-2 leading-relaxed">
             <span>⚠️</span>
             <div className="flex-1">{error}</div>
           </div>
         )}
 
         {message && (
-          <div id="auth-message-alert" className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm p-4 rounded-xl mb-4 flex flex-col gap-3 leading-relaxed">
+          <div id="auth-message-alert" className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400 text-sm p-4 rounded-xl mb-4 flex flex-col gap-3 leading-relaxed">
             <div className="flex items-start gap-2">
               <span>✅</span>
               <div className="flex-1">{message}</div>
@@ -271,29 +271,29 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
         {require2FA ? (
           /* TWO FACTOR AUTHENTICATION FORM */
           <form id="verify-2fa-form" onSubmit={handleVerify2FA} className="space-y-5 text-right">
-            <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl text-center">
+            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 p-4 rounded-2xl text-center">
               <span className="text-2xl block mb-1">🛡️</span>
-              <h3 className="text-xs font-bold text-emerald-800">حماية إضافية لحسابك</h3>
-              <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+              <h3 className="text-xs font-bold text-emerald-800 dark:text-emerald-400">حماية إضافية لحسابك</h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                 تم تفعيل نظام التحقق ثنائي الأمان لزيادة أمان المنصة. تم إرسال رمز الأمان إلى قناتك المفضلة: <strong>{twoFactorType === 'app' ? 'تطبيق التوثيق (Google Authenticator)' : twoFactorType === 'email' ? 'البريد الإلكتروني' : 'رسائل الجوال SMS'}</strong>.
               </p>
               {simulatedCode && (
-                <div className="mt-3 p-2 bg-emerald-600/10 border border-emerald-500/25 rounded-xl text-xs inline-block">
-                  <span className="text-[10px] text-slate-500 font-bold block">رمز التحقق للتجربة السريعة والمحاكاة:</span>
-                  <span className="font-mono text-lg font-extrabold text-emerald-700 tracking-widest">{simulatedCode}</span>
+                <div className="mt-3 p-2 bg-emerald-600/10 dark:bg-emerald-400/10 border border-emerald-500/25 dark:border-emerald-500/20 rounded-xl text-xs inline-block">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold block">رمز التحقق للتجربة السريعة والمحاكاة:</span>
+                  <span className="font-mono text-lg font-extrabold text-emerald-700 dark:text-emerald-400 tracking-widest">{simulatedCode}</span>
                 </div>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1.5 text-right">أدخل رمز الأمان (6 أرقام) *</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-slate-350 mb-1.5 text-right">أدخل رمز الأمان (6 أرقام) *</label>
               <input
                 type="text"
                 placeholder="------"
                 maxLength={6}
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
-                className="w-full text-center tracking-widest font-mono text-xl py-2.5 rounded-xl border border-gray-250 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                className="w-full text-center tracking-widest font-mono text-xl py-2.5 rounded-xl border border-gray-250 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
                 required
               />
             </div>
@@ -323,32 +323,32 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
           /* LOGIN FORM */
           <form id="login-form" onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">رقم الهاتف أو البريد الإلكتروني *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">رقم الهاتف أو البريد الإلكتروني *</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="مثال: 07701234567"
                   value={phoneOrEmail}
                   onChange={(e) => setPhoneOrEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm transition-colors"
                   required
                 />
-                <Phone className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
+                <Phone className="absolute right-3 top-3.5 h-4 w-4 text-gray-400" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">كلمة المرور *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">كلمة المرور *</label>
               <div className="relative">
                 <input
                   type="password"
                   placeholder="أدخل كلمة المرور الخاصة بك"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm transition-colors"
                   required
                 />
-                <KeyRound className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
+                <KeyRound className="absolute right-3 top-3.5 h-4 w-4 text-gray-400" />
               </div>
             </div>
 
@@ -356,7 +356,7 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
               type="submit"
               id="login-submit-btn"
               disabled={loading}
-              className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 transition-all cursor-pointer mt-2 text-sm"
+              className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 dark:shadow-none transition-all cursor-pointer mt-2 text-sm"
             >
               {loading ? 'جاري التحقق...' : 'دخول للمنصة 📖'}
             </button>
@@ -365,19 +365,19 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
           /* REGISTRATION FORM */
           <form id="register-form" onSubmit={handleRegister} className="space-y-4">
             {forcedRole === 'teacher' && (
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-805 p-3.5 rounded-2xl text-xs font-semibold leading-relaxed mb-4">
-                👨‍🏫 أنت الآن تسجل حساباً بصفة <strong>معلم / شيخ مقرأة</strong>. سيخضع حسابك لمراجعة واعتماد الإدارة قبل التفعيل.
+              <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-450 p-3.5 rounded-2xl text-xs font-semibold leading-relaxed mb-4">
+                👨‍🏫 أنت الآن تسجل حساباً بصفة <strong>معلم / أستاذ حوزوي</strong>. سيخضع حسابك لمراجعة واعتماد الإدارة قبل التفعيل.
               </div>
             )}
 
             {invitedTeacher && (
-              <div className="bg-indigo-50 border border-indigo-200 text-indigo-850 p-3.5 rounded-2xl text-xs font-semibold leading-relaxed mb-4">
-                📖 أنت تسجل الآن للدراسة تحت إشراف فضيلة الشيخ: <strong>{invitedTeacher.fullName}</strong>. سيتم ربط حسابك وطلبات التحاقك بحلقاته تلقائياً فور اعتماد حسابك.
+              <div className="bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900/50 text-indigo-850 dark:text-indigo-400 p-3.5 rounded-2xl text-xs font-semibold leading-relaxed mb-4">
+                📖 أنت تسجل الآن للدراسة تحت إشراف فضيلة الشيخ/الأستاذ: <strong>{invitedTeacher.fullName}</strong>. سيتم ربط حسابك وطلبات التحاقك بحلقاته تلقائياً فور اعتماد حسابك.
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                 {forcedRole === 'teacher' ? 'الاسم الكامل للمعلم *' : 'الاسم الكامل للطالب *'}
               </label>
               <div className="relative">
@@ -386,7 +386,7 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
                   placeholder="الاسم الرباعي الكامل"
                   value={regFullName}
                   onChange={(e) => setRegFullName(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm"
+                  className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm transition-colors"
                   required
                 />
                 <User className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
@@ -395,28 +395,28 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف الجوال *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">رقم الهاتف الجوال *</label>
                 <div className="relative">
                   <input
                     type="text"
                     placeholder="مثال: 07701234567"
                     value={regPhone}
                     onChange={(e) => setRegPhone(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm"
+                    className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm transition-colors"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">المحافظة والمنطقة</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">المحافظة والمنطقة</label>
                 <div className="relative">
                   <input
                     type="text"
                     placeholder="مثال: بغداد"
                     value={regCity}
                     onChange={(e) => setRegCity(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm"
+                    className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm transition-colors"
                   />
                 </div>
               </div>
@@ -424,53 +424,53 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">الجنس *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">الجنس *</label>
                 <select
                   value={regGender}
                   onChange={(e) => setRegGender(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white text-right text-sm"
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm transition-colors"
                   required
                 >
-                  <option value="Male">ذكر</option>
-                  <option value="Female">أنثى</option>
+                  <option value="Male" className="dark:bg-slate-800">ذكر</option>
+                  <option value="Female" className="dark:bg-slate-800">أنثى</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">العمر بالسنوات</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">العمر بالسنوات</label>
                 <input
                   type="number"
                   placeholder="مثال: 22"
                   value={regAge}
                   onChange={(e) => setRegAge(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm"
+                  className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right text-sm transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني (اختياري)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">البريد الإلكتروني (اختياري)</label>
               <div className="relative">
                 <input
                   type="email"
                   placeholder="name@example.com"
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm"
+                  className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm transition-colors"
                 />
                 <Mail className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">كلمة مرور الحساب *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">كلمة مرور الحساب *</label>
               <div className="relative">
                 <input
                   type="password"
                   placeholder="يجب ألا تقل عن 6 رموز"
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm"
+                  className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none pr-10 text-right text-sm transition-colors"
                   required
                 />
                 <KeyRound className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
@@ -481,7 +481,7 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
               type="submit"
               id="register-submit-btn"
               disabled={loading}
-              className="w-full py-3 px-4 bg-emerald-650 hover:bg-emerald-750 disabled:bg-slate-200 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 transition-all cursor-pointer text-sm mt-2"
+              className="w-full py-3 px-4 bg-emerald-650 hover:bg-emerald-750 disabled:bg-slate-200 dark:disabled:bg-slate-800 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 dark:shadow-none transition-all cursor-pointer text-sm mt-2"
             >
               {loading ? 'جاري تسجيل الطلب...' : 'تسجيل وإرسال الطلب للمراجعة ✨'}
             </button>
