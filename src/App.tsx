@@ -412,7 +412,7 @@ export default function App() {
                         onClick={() => setOpenFaq(prev => ({ ...prev, [index]: !prev[index] }))}
                         className="w-full flex justify-between items-center p-4.5 text-right cursor-pointer gap-4 focus:outline-none"
                       >
-                        <span className={`text-sm font-extrabold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <span className={`text-sm font-extrabold`} style={isDark ? { color: '#e2e8f0' } : { color: '#1e293b' }}>
                           {item.q}
                         </span>
                         <span className={`p-1.5 rounded-lg border transition-colors ${
@@ -425,7 +425,7 @@ export default function App() {
                       </button>
                       
                       {isExpanded && (
-                        <div className={`px-4.5 pb-4.5 text-xs leading-relaxed border-t border-dashed ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-600'}`}>
+                        <div className={`px-4.5 pb-4.5 text-xs leading-relaxed border-t border-dashed ${isDark ? 'border-slate-800' : 'border-slate-100'}`} style={isDark ? { color: '#94a3b8' } : { color: '#475569' }}>
                           {item.a}
                         </div>
                       )}
