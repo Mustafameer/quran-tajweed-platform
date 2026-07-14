@@ -1,0 +1,5 @@
+[phases.build]
+cmds = ["echo 'Using prebuilt dist from git'"]
+
+[start]
+cmd = "node dist/server.cjs"
