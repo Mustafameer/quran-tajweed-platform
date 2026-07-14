@@ -37,6 +37,13 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
   const [verificationCode, setVerificationCode] = useState('');
   const [simulatedCode, setSimulatedCode] = useState('');
   const [registeredUserId, setRegisteredUserId] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(`/start ${registeredUserId}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
 
   // Invited teacher & forced role states
   const [invitedTeacher, setInvitedTeacher] = useState<{ id: string; fullName: string } | null>(null);
@@ -249,21 +256,54 @@ export default function LoginRegister({ onLoginSuccess }: LoginRegisterProps) {
         )}
 
         {message && (
-          <div id="auth-message-alert" className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400 text-sm p-4 rounded-xl mb-4 flex flex-col gap-3 leading-relaxed">
+          <div id="auth-message-alert" className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400 text-sm p-4.5 rounded-xl mb-4 flex flex-col gap-3.5 leading-relaxed text-right">
             <div className="flex items-start gap-2">
-              <span>✅</span>
-              <div className="flex-1">{message}</div>
+              <span className="text-base">✅</span>
+              <div className="flex-1 font-bold">{message}</div>
             </div>
             {registeredUserId && (
-              <a
-                href={`https://t.me/${botName}?start=${registeredUserId}`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full bg-[#0088cc] hover:bg-[#007ab8] text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm text-xs"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.054-.309-.346-.11l-6.4 4.02-2.76-.86c-.6-.188-.61-.6.126-.89L17.2 7.03c.69-.26 1.28.16 1.093 1.19z" /></svg>
-                اضغط هنا لربط حسابك بتيليجرام (إشعار فوري للقبول)
-              </a>
+              <div className="space-y-3 pt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
+                  لإتمام عملية التسجيل وتلقي الإشعارات الفورية (مثل إشعار قبول حسابك وتنبيهات الحلقات)، يرجى ربط حسابك ببوت التيليجرام:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a
+                    href={`https://t.me/${botName}?start=${registeredUserId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-[#0088cc] hover:bg-[#007ab8] text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm text-xs"
+                  >
+                    <span>🔗 الرابط الرئيسي (t.me)</span>
+                  </a>
+                  <a
+                    href={`https://telegram.me/${botName}?start=${registeredUserId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm text-xs"
+                  >
+                    <span>🔗 رابط بديل (telegram.me)</span>
+                  </a>
+                </div>
+
+                <div className="bg-white/45 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-emerald-250/30 dark:border-emerald-800/20 text-xs text-slate-700 dark:text-slate-300 space-y-2 mt-2 leading-relaxed">
+                  <div className="font-extrabold text-[11px] text-emerald-800 dark:text-emerald-450">💡 في حال عدم استجابة الروابط (أو حجب الخدمة في بلدك):</div>
+                  <ol className="list-decimal list-inside text-[11px] space-y-1 pr-1">
+                    <li>افتح تطبيق تيليجرام وابحث عن البوت: <strong className="select-all font-mono">@{botName}</strong></li>
+                    <li>اضغط على زر **ابدأ / Start**</li>
+                    <li>أرسل كود الربط التالي للبوت كرسالة عادية:</li>
+                  </ol>
+                  <div className="flex gap-2 items-center mt-2.5 bg-white dark:bg-slate-950 p-2 rounded-xl border border-slate-200 dark:border-slate-800 justify-between">
+                    <code className="font-mono text-xs text-emerald-700 dark:text-emerald-400 select-all font-bold pr-1">/start {registeredUserId}</code>
+                    <button
+                      type="button"
+                      onClick={handleCopyCode}
+                      className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition-all cursor-pointer shadow-sm shrink-0"
+                    >
+                      {copied ? '✓ تم النسخ!' : 'نسخ الكود'}
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         )}
