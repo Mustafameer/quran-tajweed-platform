@@ -18,6 +18,7 @@ export interface User {
   age?: number;
   createdAt: string;
   avatar?: string;
+  specialty?: string;
   loginDates?: string[];
   streakDays?: number;
   twoFactorEnabled?: boolean;

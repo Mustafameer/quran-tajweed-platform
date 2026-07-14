@@ -696,6 +696,19 @@ async function startTelegramPolling(token: string) {
 
 
             let replyText = '';
+            let replyMarkup: any = undefined;
+
+            // Default keyboard for students
+            const studentKeyboard = {
+              keyboard: [
+                [{ text: '👨‍🏫 عرض الأساتذة' }, { text: '📚 دوراتي المسجلة' }],
+                [{ text: '🔴 الحصص الجارية الآن' }, { text: '📊 تقرير الأداء الأسبوعي' }],
+                [{ text: 'ℹ️ المساعدة والتعليمات' }]
+              ],
+              resize_keyboard: true,
+              one_time_keyboard: false
+            };
+
             if (text.startsWith('/start ') && text.length > 7) {
               const studentId = text.replace('/start ', '').trim();
               const user = users.find(u => u.id === studentId);
@@ -706,13 +719,50 @@ async function startTelegramPolling(token: string) {
                 replyText = isTeacher 
                   ? `أهلاً بك يا ${user.fullName} 🌸\n\nتم ربط حسابك كمعلم في "منصة القرآن الكريم والتجويد" بنجاح!\n\nسنقوم بإرسال إشعار لك هنا فور مراجعة الإدارة لحسابك والموافقة عليه.\n\nبعد الموافقة، ستتمكن من إنشاء الدورات التعليمية وإدارة حلقاتك.`
                   : `أهلاً بك يا ${user.fullName} 🌸\n\nتم ربط حسابك كطالب في "منصة القرآن الكريم والتجويد" بنجاح!\n\nسنقوم بإرسال إشعار لك هنا فور مراجعة الإدارة لحسابك والموافقة عليه.\n\nبعد الموافقة، ستتمكن من الالتحاق بالدورات التعليمية وحلقات التلاوة.`;
+                replyMarkup = studentKeyboard;
               } else {
                 replyText = `عذراً، لم نتمكن من العثور على حسابك.`;
               }
             } else if (text.startsWith('/start') || text === 'ℹ️ المساعدة والتعليمات') {
-              replyText = `أهلاً بك في منصة تلاوة وتجويد القرآن الكريم 📖\n\nالبوت متصل بالمنصة بنجاح!\n\nيستخدم البوت لإرسال الإشعارات والتنبيهات الهامة فقط.`;
+              replyText = `أهلاً بك في منصة تلاوة وتجويد القرآن الكريم 📖\n\nالبوت متصل بالمنصة بنجاح!\n\nيمكنك استخدام الأزرار أدناه للتنقل:\n• 👨‍🏫 عرض الأساتذة\n• 📚 دوراتي المسجلة\n• 🔴 الحصص الجارية الآن\n• 📊 تقرير الأداء`;
+              replyMarkup = studentKeyboard;
             } else if (text.startsWith('/register') || text === '📝 تسجيل وربط الحساب') {
               replyText = `لإكمال عملية التسجيل وربط معرف التليجرام الخاص بك (${chatId}) بحسابك التعليمي بأمان، يرجى فتح الرابط التالي في المتصفح وتسجيل الدخول:\n\nhttp://localhost:3000/profile?telegram_id=${chatId}`;
+            } else if (text.startsWith('/teachers') || text === '👨‍🏫 عرض الأساتذة') {
+              const teachers = users.filter(u => u.role === 'teacher' && u.status === 'approved');
+              if (teachers.length === 0) {
+                replyText = `لا يوجد أساتذة مسجلون حالياً في المنصة.`;
+              } else {
+                const platformUrl = process.env.RAILWAY_PUBLIC_DOMAIN 
+                  ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` 
+                  : 'https://quran-tajweed-platform-production.up.railway.app';
+                replyText = `👨‍🏫 الأساتذة المتوفرون في المنصة:\n${'─'.repeat(25)}\n\n` +
+                  teachers.map((t, i) => {
+                    const spec = (t as any).specialty || 'قرآن وتجويد';
+                    return `${i + 1}. ${t.fullName}\n   📖 التخصص: ${spec}\n   🔗 الصفحة: ${platformUrl}`;
+                  }).join('\n\n') +
+                  `\n\n${'─'.repeat(25)}\nللتسجيل في دورة أستاذ معين، افتح رابط المنصة أعلاه.`;
+              }
+            } else if (text.startsWith('/mycourses') || text === '📚 دوراتي المسجلة') {
+              // Find user by chatId
+              const currentUser = users.find(u => (u as any).telegramChatId === chatId);
+              if (!currentUser) {
+                replyText = `لم يتم ربط حسابك بعد. يرجى ربط حسابك أولاً من خلال المنصة.`;
+              } else {
+                const myEnrollments = enrollments.filter(e => e.studentId === currentUser.id && e.status === 'approved');
+                if (myEnrollments.length === 0) {
+                  replyText = `📚 لم يتم تسجيلك في أي دورة بعد.\n\nيمكنك التسجيل في الدورات المتاحة من خلال المنصة.`;
+                } else {
+                  replyText = `📚 دوراتك المسجلة:\n${'─'.repeat(25)}\n\n` +
+                    myEnrollments.map((en, i) => {
+                      const course = courses.find(c => c.id === en.courseId);
+                      if (!course) return `${i + 1}. دورة غير معروفة`;
+                      const teacher = users.find(u => u.id === course.teacherId);
+                      return `${i + 1}. ${course.name}\n   👨‍🏫 الأستاذ: ${teacher ? teacher.fullName : 'غير محدد'}\n   📅 الحالة: ${course.status === 'active' ? '🟢 نشطة' : '⏸️ متوقفة'}`;
+                    }).join('\n\n') +
+                    `\n\n${'─'.repeat(25)}\nلمزيد من التفاصيل، افتح لوحة التحكم في المنصة.`;
+                }
+              }
             } else if (text.startsWith('/classes') || text === '🔴 الحصص الجارية الآن') {
               const live = sessions.filter(s => s.status === 'live');
               if (live.length === 0) {
@@ -726,19 +776,38 @@ async function startTelegramPolling(token: string) {
                     .join('\n');
               }
             } else if (text.startsWith('/report') || text === '📊 تقرير الأداء الأسبوعي') {
-              replyText = `📊 تقرير الأداء الأسبوعي الأخير:\n\nالطالب: عمر فاروق الشمري\nالمعدل العام: 83%\n- تقدم الحفظ: 84%\n- تقدم المراجعة: 80%\n- التجويد: 85%\n\nتوجيهات الشيخ المعلم:\n"تقدم ملحوظ في سرعة الحفظ وثبات المراجعة لأول خمسة أجزاء. بارك الله فيك!"`;
+              // Try to find actual data for the user
+              const currentUser = users.find(u => (u as any).telegramChatId === chatId);
+              if (currentUser) {
+                const myEvals = evaluations.filter(e => e.studentId === currentUser.id);
+                if (myEvals.length > 0) {
+                  const avgReading = Math.round(myEvals.reduce((s, e) => s + (e.readingAccuracy || 0), 0) / myEvals.length);
+                  const avgTajweed = Math.round(myEvals.reduce((s, e) => s + (e.tajweedAccuracy || 0), 0) / myEvals.length);
+                  const avgFluency = Math.round(myEvals.reduce((s, e) => s + (e.fluency || 0), 0) / myEvals.length);
+                  const avgTotal = Math.round((avgReading + avgTajweed + avgFluency) / 3);
+                  replyText = `📊 تقرير أدائك:\n\nالطالب: ${currentUser.fullName}\nالمعدل العام: ${avgTotal}%\n- دقة القراءة: ${avgReading}%\n- التجويد: ${avgTajweed}%\n- الطلاقة: ${avgFluency}%\n\nعدد التقييمات: ${myEvals.length}`;
+                } else {
+                  replyText = `📊 لا توجد تقييمات مسجلة لك بعد.\n\nشارك في الحلقات المباشرة للحصول على تقييم من أستاذك.`;
+                }
+              } else {
+                replyText = `📊 لم يتم ربط حسابك بعد. يرجى ربط حسابك أولاً.`;
+              }
             } else {
-              replyText = `عذراً، لم أفهم هذا الأمر. البوت مخصص لإرسال الإشعارات والتنبيهات فقط.`;
+              replyText = `عذراً، لم أفهم هذا الأمر.\n\nاستخدم الأزرار أدناه أو اكتب أحد الأوامر التالية:\n/teachers - عرض الأساتذة\n/mycourses - دوراتي المسجلة\n/classes - الحصص الجارية\n/report - تقرير الأداء`;
             }
 
-            // Send reply via Telegram HTTP API without interactive buttons
+            // Send reply via Telegram HTTP API with keyboard
+            const sendBody: any = {
+              chat_id: chatId,
+              text: replyText || '...'
+            };
+            if (replyMarkup) {
+              sendBody.reply_markup = replyMarkup;
+            }
             await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: chatId,
-                text: replyText || '...'
-              })
+              body: JSON.stringify(sendBody)
             });
           }
         }
@@ -1008,7 +1077,7 @@ async function startServer() {
   });
 
   app.post('/api/users/update-profile', (req, res) => {
-    const { userId, phone, email, city, password, avatar, twoFactorEnabled, twoFactorType, notificationPreferences } = req.body;
+    const { userId, phone, email, city, specialty, password, avatar, twoFactorEnabled, twoFactorType, notificationPreferences } = req.body;
     if (!userId) {
       return res.status(400).json({ error: 'معرّف المستخدم مطلوب' });
     }
@@ -1038,6 +1107,10 @@ async function startServer() {
 
     if (city !== undefined) {
       users[userIndex].city = city;
+    }
+
+    if (specialty !== undefined) {
+      (users[userIndex] as any).specialty = specialty;
     }
 
     if (avatar !== undefined) {
@@ -1669,9 +1742,23 @@ async function startServer() {
     let replyText = '';
 
     if (text.startsWith('/start') || text === 'ℹ️ المساعدة والتعليمات') {
-      replyText = `أهلاً بك في منصة تلاوة وتجويد القرآن الكريم 📖\n\nالبوت متصل بالمنصة بنجاح!\n\nيمكنك استخدام الأزرار الموضحة في لوحة المفاتيح للتنقل السريع دون الحاجة للكتابة بالإنجليزية.`;
+      replyText = `أهلاً بك في منصة تلاوة وتجويد القرآن الكريم 📖\n\nالبوت متصل بالمنصة بنجاح!\n\nيمكنك استخدام الأزرار أدناه للتنقل:\n• 👨‍🏫 عرض الأساتذة\n• 📚 دوراتي المسجلة\n• 🔴 الحصص الجارية الآن\n• 📊 تقرير الأداء`;
     } else if (text.startsWith('/register') || text === '📝 تسجيل وربط الحساب') {
       replyText = `لإكمال عملية التسجيل وربط معرف التليجرام الخاص بك (${chatId}) بحسابك التعليمي بأمان، يرجى فتح الرابط التالي في المتصفح وتسجيل الدخول:\n\nhttp://localhost:3000/profile?telegram_id=${chatId}`;
+    } else if (text.startsWith('/teachers') || text === '👨‍🏫 عرض الأساتذة') {
+      const teachers = users.filter(u => u.role === 'teacher' && u.status === 'approved');
+      if (teachers.length === 0) {
+        replyText = `لا يوجد أساتذة مسجلون حالياً في المنصة.`;
+      } else {
+        const platformUrl = 'https://quran-tajweed-platform-production.up.railway.app';
+        replyText = `👨‍🏫 الأساتذة المتوفرون في المنصة:\n${'─'.repeat(25)}\n\n` +
+          teachers.map((t, i) => {
+            const spec = (t as any).specialty || 'قرآن وتجويد';
+            return `${i + 1}. ${t.fullName}\n   📖 التخصص: ${spec}\n   🔗 الصفحة: ${platformUrl}`;
+          }).join('\n\n');
+      }
+    } else if (text.startsWith('/mycourses') || text === '📚 دوراتي المسجلة') {
+      replyText = `📚 للاطلاع على دوراتك المسجلة، يرجى فتح لوحة التحكم في المنصة.\n\nسيتم عرض جميع الدورات النشطة والمكتملة مع معلومات كل دورة وأستاذها.`;
     } else if (text.startsWith('/classes') || text === '🔴 الحصص الجارية الآن') {
       const live = sessions.filter(s => s.status === 'live');
       if (live.length === 0) {
@@ -1685,9 +1772,9 @@ async function startServer() {
             .join('\n');
       }
     } else if (text.startsWith('/report') || text === '📊 تقرير الأداء الأسبوعي') {
-      replyText = `📊 تقرير الأداء الأسبوعي الأخير:\n\nالطالب: عمر فاروق الشمري\nالمعدل العام: 83%\n- تقدم الحفظ: 84%\n- تقدم المراجعة: 80%\n- التجويد: 85%\n\nتوجيهات الشيخ المعلم:\n"تقدم ملحوظ في سرعة الحفظ وثبات المراجعة لأول خمسة أجزاء. بارك الله فيك!"`;
+      replyText = `📊 تقرير الأداء الأسبوعي الأخير:\n\nللاطلاع على تقرير أدائك التفصيلي، افتح لوحة التحكم الخاصة بك في المنصة.`;
     } else {
-      replyText = `عذراً، لم أفهم هذا الأمر. يرجى استخدام الأزرار التفاعلية أسفل الشاشة للتنقل السريع.`;
+      replyText = `عذراً، لم أفهم هذا الأمر.\n\nاستخدم الأزرار أدناه أو اكتب أحد الأوامر التالية:\n/teachers - عرض الأساتذة\n/mycourses - دوراتي المسجلة\n/classes - الحصص الجارية\n/report - تقرير الأداء`;
     }
 
     res.json({

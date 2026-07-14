@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { User as UserIcon, Mail, Phone, MapPin, Lock, Camera, Check, AlertCircle, Save, Shield } from 'lucide-react';
+import { User as UserIcon, Mail, Phone, MapPin, Lock, Camera, Check, AlertCircle, Save, Shield, Award } from 'lucide-react';
 import { User } from '../types';
 import { useToast } from './Toast';
 
@@ -15,6 +15,7 @@ export default function ProfileEditor({ currentUser, onUpdateUser, isDark = fals
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(currentUser.email || '');
   const [city, setCity] = useState(currentUser.city || '');
+  const [specialty, setSpecialty] = useState(currentUser.specialty || '');
   
   // 2FA States
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(currentUser.twoFactorEnabled || false);
@@ -145,6 +146,7 @@ export default function ProfileEditor({ currentUser, onUpdateUser, isDark = fals
           phone,
           email: email || undefined,
           city: city || undefined,
+          specialty: currentUser.role === 'teacher' ? (specialty || undefined) : undefined,
           avatar: avatarBase64 || undefined,
           password: newPassword || undefined,
           twoFactorEnabled,
@@ -344,6 +346,26 @@ export default function ProfileEditor({ currentUser, onUpdateUser, isDark = fals
               />
             </div>
           </div>
+
+          {currentUser.role === 'teacher' && (
+            <div>
+              <label className={`block text-xs font-bold mb-1.5 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>الاختصاص / التخصص التعليمي</label>
+              <div className="relative">
+                <span className="absolute right-3 top-3.5 text-slate-400">
+                  <Award className="h-4 w-4" />
+                </span>
+                <input
+                  type="text"
+                  value={specialty}
+                  onChange={(e) => setSpecialty(e.target.value)}
+                  className={`w-full text-xs font-bold px-3 py-3 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-800'
+                  }`}
+                  placeholder="مثال: قرآن، تجويد، فقه، عقائد"
+                />
+              </div>
+            </div>
+          )}
 
           {/* Change Password Sub-Section */}
           <div className="sm:col-span-2 border-t border-slate-150 dark:border-slate-800/80 pt-4 mt-2">
