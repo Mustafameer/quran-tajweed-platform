@@ -366,11 +366,11 @@ export default function App() {
             {/* ❓ Frequently Asked Questions Section */}
             <div className={`mt-20 border-t pt-14 ${isDark ? 'border-slate-850' : 'border-slate-200/60'}`} id="faq-section">
               <div className="text-center space-y-2 mb-10">
-                <span className={`text-[11px] font-bold px-3.5 py-1.5 rounded-full border ${isDark ? 'bg-emerald-950/40 border-emerald-900/50 text-emerald-400' : 'bg-emerald-50 border-emerald-100 text-emerald-800'}`}>
+                <span className="text-[11px] font-bold px-3.5 py-1.5 rounded-full border bg-emerald-950/40 border-emerald-900/50 text-emerald-400">
                   الأسئلة الشائعة والاستفسارات ❓
                 </span>
-                <h3 className={`text-2xl font-black ${isDark ? 'text-slate-100' : 'text-slate-850'}`}>هل لديك استفسار عن المنصة؟</h3>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-550'} max-w-xl mx-auto`}>
+                <h3 className="text-2xl font-black text-slate-100">هل لديك استفسار عن المنصة؟</h3>
+                <p className="text-xs text-slate-400 max-w-xl mx-auto">
                   جمعنا لكم أبرز الأسئلة المتكررة حول كيفية التسجيل واستخدام غرف المقارئ والتقييم لمساعدتكم في الانطلاق والتعليم.
                 </p>
               </div>
@@ -405,28 +405,28 @@ export default function App() {
                       className={`border rounded-2xl overflow-hidden transition-all duration-200 ${
                         isExpanded 
                           ? isDark ? 'bg-[#121826]/85 border-emerald-500/50' : 'bg-emerald-50/20 border-emerald-400/40 shadow-sm' 
-                          : isDark ? 'bg-[#121826]/40 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-100 hover:border-slate-200'
+                          : isDark ? 'bg-[#121826]/40 border-slate-800 hover:border-slate-700' : 'bg-white/10 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       <button
                         onClick={() => setOpenFaq(prev => ({ ...prev, [index]: !prev[index] }))}
                         className="w-full flex justify-between items-center p-4.5 text-right cursor-pointer gap-4 focus:outline-none"
-                        style={{ color: isDark ? '#e2e8f0' : '#1e293b' }}
+                        style={{ color: '#e2e8f0' }}
                       >
                         <span className="text-sm font-extrabold">
                           {item.q}
                         </span>
-                        <span className={`p-1.5 rounded-lg border transition-colors ${
+                        <span className={`p-1.5 rounded-lg border transition-colors flex-shrink-0 ${
                           isExpanded 
                             ? 'bg-emerald-500 border-emerald-400 text-white' 
-                            : isDark ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-550'
+                            : 'bg-slate-800 border-slate-700 text-slate-400'
                         }`}>
                           {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                         </span>
                       </button>
                       
                       {isExpanded && (
-                        <div className={`px-4.5 pb-4.5 text-xs leading-relaxed border-t border-dashed ${isDark ? 'border-slate-800' : 'border-slate-100'}`} style={isDark ? { color: '#94a3b8' } : { color: '#475569' }}>
+                        <div className="px-4.5 pb-4.5 text-xs leading-relaxed border-t border-dashed border-slate-700" style={{ color: '#94a3b8' }}>
                           {item.a}
                         </div>
                       )}
