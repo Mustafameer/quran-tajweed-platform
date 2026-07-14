@@ -1024,7 +1024,7 @@ export default function TeacherDashboard({ currentUser, onLogout, onLaunchClassr
                     <select
                       value={newSessionCourse}
                       onChange={(e) => setNewSessionCourse(e.target.value)}
-                      className={`w-full px-3 py-2 border rounded-lg outline-none text-sm text-right bg-white focus:ring-2 focus:ring-emerald-500 ${isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'}`}
+                      className={`w-full px-3 py-2 border rounded-lg outline-none text-sm text-right focus:ring-2 focus:ring-emerald-500 ${isDark ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-800'}`}
                       required
                     >
                       <option value="">-- اختر الدورة --</option>
